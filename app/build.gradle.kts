@@ -21,7 +21,7 @@ val marvelApiKeyPrivate: String? = properties.getProperty("MARVEL_API_KEY_PRIVAT
 
 android {
     namespace = "com.aviva.marveltestapp"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.aviva.marveltestapp"
@@ -50,6 +50,11 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+
+    // Habilitar la generación de BuildConfig
+    buildFeatures {
+        buildConfig = true
     }
 }
 
