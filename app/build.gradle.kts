@@ -23,6 +23,13 @@ android {
     namespace = "com.aviva.marveltestapp"
     compileSdk = 34
 
+    // Habilitar la generación de campos BuildConfig personalizados
+    buildFeatures {
+        buildConfig = true
+        viewBinding = true
+    }
+
+
     defaultConfig {
         applicationId = "com.aviva.marveltestapp"
         minSdk = 24
@@ -50,11 +57,6 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
-    }
-
-    // Habilitar la generación de BuildConfig
-    buildFeatures {
-        buildConfig = true
     }
 }
 
