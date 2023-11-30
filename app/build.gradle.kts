@@ -21,7 +21,14 @@ val marvelApiKeyPrivate: String? = properties.getProperty("MARVEL_API_KEY_PRIVAT
 
 android {
     namespace = "com.aviva.marveltestapp"
-    compileSdk = 33
+    compileSdk = 34
+
+    // Habilitar la generación de campos BuildConfig personalizados
+    buildFeatures {
+        buildConfig = true
+        viewBinding = true
+    }
+
 
     defaultConfig {
         applicationId = "com.aviva.marveltestapp"
