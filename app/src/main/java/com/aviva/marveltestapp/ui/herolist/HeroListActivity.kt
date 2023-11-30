@@ -1,10 +1,10 @@
-package com.aviva.marveltestapp.ui.main
+package com.aviva.marveltestapp.ui.herolist
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.aviva.marveltestapp.R
 
-class MainActivity : AppCompatActivity() {
+class HeroListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

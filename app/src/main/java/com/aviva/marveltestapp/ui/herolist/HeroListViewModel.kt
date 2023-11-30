@@ -1,4 +1,4 @@
-package com.aviva.marveltestapp.ui.main
+package com.aviva.marveltestapp.ui.herolist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
@@ -6,7 +6,7 @@ import com.aviva.marveltestapp.data.repository.SuperheroRepository
 import com.aviva.marveltestapp.util.Result
 import kotlinx.coroutines.Dispatchers
 
-class MainViewModel(private val superheroRepository: SuperheroRepository) : ViewModel() {
+class HeroListViewModel(private val superheroRepository: SuperheroRepository) : ViewModel() {
 
     val superheroes = liveData(Dispatchers.IO) {
         emit(Result.Loading) // Emite el estado de carga

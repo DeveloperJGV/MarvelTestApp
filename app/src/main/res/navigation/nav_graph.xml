@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.aviva.marveltestapp.ui.main.MainFragment"
+        android:name="com.aviva.marveltestapp.ui.herolist.HeroListFragment"
         android:label="fragment_main"
         tools:layout="@layout/fragment_main">
         <action

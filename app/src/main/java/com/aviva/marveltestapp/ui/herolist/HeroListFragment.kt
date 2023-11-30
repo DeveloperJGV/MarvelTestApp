@@ -1,4 +1,4 @@
-package com.aviva.marveltestapp.ui.main
+package com.aviva.marveltestapp.ui.herolist
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,18 +18,18 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import com.aviva.marveltestapp.data.model.Character
 
-class MainFragment : Fragment() {
+class HeroListFragment : Fragment() {
 
-    private lateinit var viewModel: MainViewModel
-    private lateinit var viewModelFactory: MainViewModelFactory
+    private lateinit var viewModel: HeroListViewModel
+    private lateinit var viewModelFactory: HeroListModelFactory
     private lateinit var superheroAdapter: SuperheroAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Inicialización del repositorio y la fábrica de ViewModel
         val superheroRepository = SuperheroRepository(RetrofitInstance.api)
-        viewModelFactory = MainViewModelFactory(superheroRepository)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
+        viewModelFactory = HeroListModelFactory(superheroRepository)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(HeroListViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -47,7 +47,7 @@ class MainFragment : Fragment() {
         val navController = findNavController()
         superheroAdapter = SuperheroAdapter { character: Character ->
             // Manejo del clic en cada personaje
-            val action = MainFragmentDirections.actionMainFragmentToHeroDetailsFragment(character.id, character.thumbnail.getUrl())
+            val action = HeroListFragmentDirections.actionMainFragmentToHeroDetailsFragment(character.id, character.thumbnail.getUrl())
             navController.navigate(action)
 
         }
@@ -60,14 +60,14 @@ class MainFragment : Fragment() {
         viewModel.superheroes.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Result.Loading -> {
-                    view.findViewById<ProgressBar>(R.id.progressBar).visibility = View.VISIBLE
+                    view.findViewById<ProgressBar>(R.id.pbHeroList).visibility = View.VISIBLE
                 }
                 is Result.Success -> {
-                    view.findViewById<ProgressBar>(R.id.progressBar).visibility = View.GONE
+                    view.findViewById<ProgressBar>(R.id.pbHeroList).visibility = View.GONE
                     superheroAdapter.submitList(result.data)
                 }
                 is Result.Error -> {
-                    view.findViewById<ProgressBar>(R.id.progressBar).visibility = View.GONE
+                    view.findViewById<ProgressBar>(R.id.pbHeroList).visibility = View.GONE
                     Toast.makeText(context, "Error: ${result.exception.message}", Toast.LENGTH_LONG).show()
                 }
             }
