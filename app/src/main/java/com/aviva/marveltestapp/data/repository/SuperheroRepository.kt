@@ -3,7 +3,7 @@ package com.aviva.marveltestapp.data.repository
 import com.aviva.marveltestapp.data.api.MarvelApiService
 import com.aviva.marveltestapp.util.generateMarvelHash
 import com.aviva.marveltestapp.BuildConfig
-import com.aviva.marveltestapp.data.model.Character
+import com.avi
 
 
 

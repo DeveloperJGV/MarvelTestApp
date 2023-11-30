@@ -13,8 +13,6 @@ class MyApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-
-
         val httpCacheDirectory = File(cacheDir, "http-cache")
         val cacheSize = 10 * 1024 * 1024 // 10 MiB
         val cache = Cache(httpCacheDirectory, cacheSize.toLong())
