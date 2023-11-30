@@ -5,56 +5,79 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.aviva.marveltestapp.R
+import com.aviva.marveltestapp.data.api.RetrofitInstance
+import com.aviva.marveltestapp.data.repository.SuperheroRepository
+import com.aviva.marveltestapp.databinding.FragmentHeroDetailsBinding
+import com.aviva.marveltestapp.ui.adapters.ComicAdapter
+import com.squareup.picasso.Picasso
+import com.aviva.marveltestapp.util.Result
+import com.aviva.marveltestapp.data.model.Character
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [HeroDetailsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+
 class HeroDetailsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var viewModel: HeroDetailViewModel
+    private lateinit var viewModelFactory: HeroDetailViewModelFactory
+    private lateinit var comicAdapter: ComicAdapter
+    private var _binding: FragmentHeroDetailsBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+        val superheroRepository = SuperheroRepository(RetrofitInstance.api)
+        val heroId = arguments?.getInt("characterId") ?: 0
+        println("Received character ID in HeroDetailsFragment: $heroId")
+        viewModelFactory = HeroDetailViewModelFactory(superheroRepository, heroId)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(HeroDetailViewModel::class.java)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        _binding = FragmentHeroDetailsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        comicAdapter = ComicAdapter()
+        binding.recyclerViewComics.layoutManager = LinearLayoutManager(context)
+        binding.recyclerViewComics.adapter = comicAdapter
+
+        viewModel.characterDetails.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is Result.Loading -> {
+                    // Muestra un indicador de carga
+                }
+                is Result.Success -> {
+                    // Actualiza la UI con los detalles del personaje
+                    if (result.data is Character) {
+                        val character = result.data
+                        binding.textViewHeroName.text = character.name
+                        // Verifica si la descripción está vacía
+                        if (character.description.isNullOrEmpty()) {
+                            binding.textViewHeroDescription.text = getString(R.string.classified_description)
+                        } else {
+                            binding.textViewHeroDescription.text = character.description
+                        }
+                        comicAdapter.updateComics(character.comics.items)
+                        // Carga la imagen del personaje con Picasso
+                        Picasso.get()
+                            .load(arguments?.getString("characterImage"))
+                            .into(binding.imageViewHero)
+                    }
+                }
+                is Result.Error -> {
+                    // Muestra un mensaje de error
+                }
+            }
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_hero_details, container, false)
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment HeroDetailsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            HeroDetailsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
