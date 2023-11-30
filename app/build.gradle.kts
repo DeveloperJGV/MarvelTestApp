@@ -29,7 +29,6 @@ android {
         viewBinding = true
     }
 
-
     defaultConfig {
         applicationId = "com.aviva.marveltestapp"
         minSdk = 24
@@ -57,6 +56,11 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+
+    // Habilitar la generación de BuildConfig
+    buildFeatures {
+        buildConfig = true
     }
 }
 
