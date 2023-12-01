@@ -48,8 +48,9 @@ class HeroListFragment : Fragment() {
         superheroAdapter = SuperheroAdapter { character: Character ->
             // Manejo del clic en cada personaje
             val action = HeroListFragmentDirections.actionMainFragmentToHeroDetailsFragment(character.id, character.thumbnail.getUrl())
-            navController.navigate(action)
-
+            if (navController.currentDestination?.id != R.id.heroDetailsFragment) {
+                navController.navigate(action)
+            }
         }
 
         val recyclerView: RecyclerView = view.findViewById(R.id.rvHeroList)

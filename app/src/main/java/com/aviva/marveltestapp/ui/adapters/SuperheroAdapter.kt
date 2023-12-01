@@ -26,8 +26,10 @@ class SuperheroAdapter(
         private var currentCharacter2: Character? = null
 
         init {
-            view.setOnClickListener {
+            imageView1.setOnClickListener {
                 currentCharacter1?.let(onClick)
+            }
+            imageView2.setOnClickListener {
                 currentCharacter2?.let(onClick)
             }
         }
